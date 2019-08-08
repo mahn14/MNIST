@@ -1,28 +1,26 @@
-# Dependencies
 import numpy as np 
 
 
-# Softmax Equation
-def softmax(y):
-    y = np.array(y)
+''' Softmax Function returns vector of probabilities'''
+def softmax(X):
+    C = np.max(X)
+    exps = np.exp(X - C) 
+    sm = exps / np.sum(exps)
 
-    # stabilizing constant
-    C = -max(y)
+    return(sm)
 
-    # softmax calculations
-    exps = C*np.exp(y + C) 
-    sums = np.sum(exps)
-    softmax_result = exps/sums
 
-    return(softmax_result)
+def cross_entropy(X,y):
+    p = softmax(X)
+    CE = -np.sum(y*np.log(p)) / len(y)
 
-def softmax_derivative(p):
-    
-    if i == j:
-        d = p[i]*(1-p[j])
-    elif i != j:
-        d = -p[i]*p[j]
-    else:
-        return("Warning: Index Problem")
+    return(CE)
 
-    return(d)
+
+def delta_cross_entropy(X,y):
+    m = len(y)
+    grad = softmax(X)
+    grad[range(m),y] -= 1
+    grad = grad / m
+
+    return(grad)
